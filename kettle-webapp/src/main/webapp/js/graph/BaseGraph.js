@@ -357,7 +357,7 @@ BaseGraph = Ext.extend(Ext.Panel, {
 		} else {
 			Ext.Msg.show({
 			   title: '系统提示',
-			   msg: '该插件[' + pluginType + ']待实现，请联系lhy249056652@sina.com',
+			   msg: '该插件[' + pluginType + ']待实现',
 			   buttons: Ext.Msg.OK,
 			   icon: Ext.MessageBox.WARNING
 			});

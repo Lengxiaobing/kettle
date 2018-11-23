@@ -64,7 +64,7 @@ public interface SlaveService {
      * @return
      * @throws Exception
      */
-    String slaveTest(String hostName) throws Exception;
+    String slaveTest(String hostName,String port) throws Exception;
 
     /**
      * 所有从属配额

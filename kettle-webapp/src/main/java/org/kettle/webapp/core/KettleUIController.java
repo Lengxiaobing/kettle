@@ -1,19 +1,5 @@
 package org.kettle.webapp.core;
 
-import java.awt.Color;
-import java.awt.Font;
-import java.awt.FontMetrics;
-import java.awt.Graphics;
-import java.awt.image.BufferedImage;
-import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
-
-import javax.imageio.ImageIO;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.swing.JLabel;
-
 import org.apache.commons.io.IOUtils;
 import org.kettle.ext.PluginFactory;
 import org.kettle.ext.core.PropsUI;
@@ -33,11 +19,17 @@ import org.pentaho.di.trans.step.StepMetaInterface;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.StringUtils;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
+
+import javax.imageio.ImageIO;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.swing.*;
+import java.awt.*;
+import java.awt.image.BufferedImage;
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * @description: kettle UI控制器
@@ -145,6 +137,13 @@ public class KettleUIController {
         JsonUtils.success("aaa");
     }
 
+    /**
+     * 步骤js
+     * @param request
+     * @param response
+     * @param pluginId
+     * @throws Exception
+     */
     @ResponseBody
     @RequestMapping(method = {RequestMethod.POST, RequestMethod.GET}, value = "/stepjs/{pluginId}")
     protected void stepjs(HttpServletRequest request, HttpServletResponse response, @PathVariable String pluginId) throws Exception {

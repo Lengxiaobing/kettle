@@ -250,7 +250,8 @@ public class SlaveController {
     protected void slaveTest(HttpServletResponse response, HttpServletRequest request) throws Exception {
         try {
             String hostName = request.getParameter("hostName");
-            String result = slaveService.slaveTest(hostName);
+            String port = request.getParameter("port");
+            String result = slaveService.slaveTest(hostName, port);
             PrintWriter out = response.getWriter();
             out.write(result);
             out.flush();

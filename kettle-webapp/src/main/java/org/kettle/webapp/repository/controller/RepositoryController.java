@@ -1,19 +1,5 @@
 package org.kettle.webapp.repository.controller;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.Enumeration;
-import java.util.List;
-import java.util.zip.ZipEntry;
-import java.util.zip.ZipFile;
-import java.util.zip.ZipInputStream;
-import java.util.zip.ZipOutputStream;
-
 import org.apache.commons.io.IOUtils;
 import org.apache.ibatis.session.SqlSession;
 import org.kettle.ext.App;
@@ -26,6 +12,9 @@ import org.kettle.ext.utils.JsonArray;
 import org.kettle.ext.utils.JsonObject;
 import org.kettle.ext.utils.JsonUtils;
 import org.kettle.ext.utils.StringEscapeHelper;
+import org.kettle.sxdata.entity.TaskGroupAttributeEntity;
+import org.kettle.sxdata.util.common.StringDateUtil;
+import org.kettle.sxdata.util.task.CarteClient;
 import org.kettle.webapp.bean.RepositoryCheckNode;
 import org.kettle.webapp.bean.RepositoryNode;
 import org.kettle.webapp.repository.beans.RepositoryNodeType;
@@ -44,13 +33,7 @@ import org.pentaho.di.core.variables.Variables;
 import org.pentaho.di.core.xml.XMLHandler;
 import org.pentaho.di.i18n.BaseMessages;
 import org.pentaho.di.job.JobMeta;
-import org.pentaho.di.repository.ObjectId;
-import org.pentaho.di.repository.RepositoriesMeta;
-import org.pentaho.di.repository.Repository;
-import org.pentaho.di.repository.RepositoryDirectoryInterface;
-import org.pentaho.di.repository.RepositoryElementMetaInterface;
-import org.pentaho.di.repository.RepositoryMeta;
-import org.pentaho.di.repository.RepositoryObjectType;
+import org.pentaho.di.repository.*;
 import org.pentaho.di.repository.kdr.KettleDatabaseRepositoryMeta;
 import org.pentaho.di.trans.TransMeta;
 import org.pentaho.di.ui.core.PropsUI;
@@ -58,16 +41,19 @@ import org.pentaho.di.ui.repository.kdr.KettleDatabaseRepositoryDialog;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.StringUtils;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.kettle.sxdata.entity.TaskGroupAttributeEntity;
-import org.kettle.sxdata.util.common.StringDateUtil;
-import org.kettle.sxdata.util.task.CarteClient;
+import org.springframework.web.bind.annotation.*;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
+
+import java.io.*;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.Enumeration;
+import java.util.List;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipFile;
+import java.util.zip.ZipInputStream;
+import java.util.zip.ZipOutputStream;
 
 /**
  * @description: 存储库控制器
@@ -138,13 +124,22 @@ public class RepositoryController {
         JsonUtils.success(newdir.getPath());
     }
 
+    /**
+     * 创建转换
+     *
+     * @param dir
+     * @param transName
+     * @param taskGroupArray
+     * @throws KettleException
+     * @throws IOException
+     */
     @ResponseBody
     @RequestMapping(method = RequestMethod.POST, value = "/createTrans")
     protected void createTrans(@RequestParam String dir, @RequestParam String transName, @RequestParam String[] taskGroupArray) throws KettleException, IOException {
         boolean isSuccess = false;
         Repository repository = App.getInstance().getRepository();
         RepositoryDirectoryInterface directory = null;
-        TransMeta transMeta = null;
+        TransMeta transMeta;
         SqlSession sqlSession = CarteClient.sessionFactory.openSession();
         try {
             directory = repository.findDirectory(dir);
@@ -175,7 +170,7 @@ public class RepositoryController {
                     attr.setTaskId(taskId);
                     attr.setTaskPath(dir + transName);
                     attr.setTaskName(transName);
-                    sqlSession.insert("TaskGroupDao.addTaskGroupAttribute", attr);
+                    sqlSession.insert("org.kettle.sxdata.dao.TaskGroupDao.addTaskGroupAttribute", attr);
                 }
                 sqlSession.commit();
                 sqlSession.close();

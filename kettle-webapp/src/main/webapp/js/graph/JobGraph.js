@@ -89,7 +89,7 @@ JobGraph = Ext.extend(BaseGraph, {
 			}/*, '-', {
 				iconCls: 'SlaveServer', scope: this, handler: this.showSlaves
 			}*/, '-', {
-				iconCls: 'show-results', scope: this, handler: this.showResultPanel
+				iconCls: 'show-results', scope: this, handler: this.showResultPanel,tooltip: '结果面板'
 			},{
 				iconCls: 'databasesCls', scope: this, handler: this.databaseConn,tooltip: '数据库连接'
 			}];

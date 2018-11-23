@@ -790,9 +790,9 @@ public class SlaveServiceImpl implements SlaveService {
 
 
     @Override
-    public String slaveTest(String hostName) throws Exception {
+    public String slaveTest(String hostName, String port) throws Exception {
         JSONObject json = new JSONObject();
-        SlaveEntity slave = slaveDao.getSlaveByHostName(hostName);
+        SlaveEntity slave = slaveDao.getSlaveByHostNameAndPort(hostName, port);
         slave.setPassword(KettleEncr.decryptPasswd(slave.getPassword()));
         CarteClient cc = new CarteClient(slave);
         boolean isActive = cc.isActive();
