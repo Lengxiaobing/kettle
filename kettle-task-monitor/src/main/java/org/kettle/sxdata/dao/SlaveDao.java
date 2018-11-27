@@ -52,6 +52,16 @@ public interface SlaveDao {
      */
     SlaveEntity getSlaveByHostNameAndPort(String hostName, String port);
 
+    /**
+     * 根据hostName、port和name查询slave
+     *
+     * @param hostName
+     * @param port
+     * @param name
+     * @return
+     */
+    List<SlaveEntity> getSlaveByHostNameAndPortOrName(String hostName, String port, String name);
+
 
     /**
      * 根据pageInfo查询Slave

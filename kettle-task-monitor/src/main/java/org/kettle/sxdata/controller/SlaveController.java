@@ -263,7 +263,7 @@ public class SlaveController {
     }
 
     /**
-     * 单独对节点的某项指标进行监
+     * 单独对节点的某项指标进行监测
      *
      * @param response
      * @param request

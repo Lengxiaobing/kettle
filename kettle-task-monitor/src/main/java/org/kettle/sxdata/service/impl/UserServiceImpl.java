@@ -103,9 +103,9 @@ public class UserServiceImpl implements UserService {
         }
         //获取用户类型
         Integer userTypeI = null;
-        if (userType.equals("管理员")) {
+        if ("管理员".equals(userType)) {
             userTypeI = 1;
-        } else if (userType.equals("普通用户")) {
+        } else if ("普通用户".equals(userType)) {
             userTypeI = 2;
         }
 

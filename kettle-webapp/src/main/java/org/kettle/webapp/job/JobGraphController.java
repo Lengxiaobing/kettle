@@ -1,12 +1,7 @@
 package org.kettle.webapp.job;
 
-import java.io.PrintWriter;
-import java.net.URLDecoder;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
+import com.enterprisedt.net.ftp.FTPClient;
+import com.mxgraph.util.mxUtils;
 import org.kettle.ext.App;
 import org.kettle.ext.JobExecutor;
 import org.kettle.ext.PluginFactory;
@@ -14,7 +9,10 @@ import org.kettle.ext.base.GraphCodec;
 import org.kettle.ext.core.database.DatabaseCodec;
 import org.kettle.ext.job.JobExecutionConfigurationCodec;
 import org.kettle.ext.job.step.JobEntryEncoder;
-import org.kettle.ext.utils.*;
+import org.kettle.ext.utils.JsonArray;
+import org.kettle.ext.utils.JsonObject;
+import org.kettle.ext.utils.JsonUtils;
+import org.kettle.ext.utils.StringEscapeHelper;
 import org.kettle.webapp.utils.GetJobSqlProgress;
 import org.pentaho.di.core.Const;
 import org.pentaho.di.core.RowMetaAndData;
@@ -44,10 +42,13 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.w3c.dom.Element;
 
-import com.enterprisedt.net.ftp.FTPClient;
-import com.mxgraph.util.mxUtils;
-
 import javax.servlet.http.HttpServletResponse;
+import java.io.PrintWriter;
+import java.net.URLDecoder;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * @description: 作业图形控制器
@@ -490,7 +491,6 @@ public class JobGraphController {
         JobExecutionConfiguration executionConfiguration = App.getInstance().getJobExecutionConfiguration();
 
         // Remember the variables set previously
-        //
         RowMetaAndData variables = App.getInstance().getVariables();
         Object[] data = variables.getData();
         String[] fields = variables.getRowMeta().getFieldNames();
@@ -530,7 +530,6 @@ public class JobGraphController {
     @ResponseBody
     @RequestMapping(method = RequestMethod.POST, value = "/run")
     protected void run(@RequestParam String graphXml, @RequestParam String executionConfiguration) throws Exception {
-
         GraphCodec codec = (GraphCodec) PluginFactory.getBean(GraphCodec.JOB_CODEC);
         JobMeta jobMeta = (JobMeta) codec.decode(graphXml);
 
@@ -540,9 +539,6 @@ public class JobGraphController {
         JobExecutor jobExecutor = JobExecutor.initExecutor(jobExecutionConfiguration, jobMeta);
         Thread tr = new Thread(jobExecutor, "JobExecutor_" + jobExecutor.getExecutionId());
         tr.start();
-
-        //executions.put(jobExecutor.getExecutionId(), jobExecutor);
-
         JsonUtils.success(jobExecutor.getExecutionId());
     }
 
@@ -564,13 +560,9 @@ public class JobGraphController {
 
             jsonObject.put("jobMeasure", jobExecutor.getJobMeasure());
             jsonObject.put("log", StringEscapeHelper.encode(jobExecutor.getExecutionLog()));
-//			jsonObject.put("stepStatus", transExecutor.getStepStatus());
-//			jsonObject.put("previewData", transExecutor.getPreviewData());
         } else {
             jsonObject.put("jobMeasure", jobExecutor.getJobMeasure());
             jsonObject.put("log", StringEscapeHelper.encode(jobExecutor.getExecutionLog()));
-//			jsonObject.put("stepStatus", transExecutor.getStepStatus());
-//			jsonObject.put("previewData", transExecutor.getPreviewData());
         }
 
         JsonUtils.response(jsonObject);

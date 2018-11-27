@@ -185,9 +185,7 @@ public class RepositoryController {
             //出现异常回滚
             e.printStackTrace();
             if (e instanceof KettleException) {
-                repository.disconnect();
-                repository.init(App.meta);
-                repository.connect("admin", "admin");
+                repository = App.getInstance().reConnect();
             }
             sqlSession.rollback();
             sqlSession.close();
@@ -200,6 +198,15 @@ public class RepositoryController {
         }
     }
 
+    /**
+     * 创建作业
+     *
+     * @param dir
+     * @param jobName
+     * @param taskGroupArray
+     * @throws KettleException
+     * @throws IOException
+     */
     @ResponseBody
     @RequestMapping(method = RequestMethod.POST, value = "/createJob")
     protected void createJob(@RequestParam String dir, @RequestParam String jobName, @RequestParam String[] taskGroupArray) throws KettleException, IOException {
@@ -238,7 +245,7 @@ public class RepositoryController {
                     attr.setTaskId(taskId);
                     attr.setTaskPath(dir + jobName);
                     attr.setTaskName(jobName);
-                    sqlSession.insert("TaskGroupDao.addTaskGroupAttribute", attr);
+                    sqlSession.insert("org.kettle.sxdata.dao.TaskGroupDao.addTaskGroupAttribute", attr);
                 }
                 sqlSession.commit();
                 sqlSession.close();
@@ -254,9 +261,8 @@ public class RepositoryController {
             //数据库连接出现问题后kettle内部api资源库连接失效需要捕获异常后重新连接
             e.printStackTrace();
             if (e instanceof KettleException) {
-                repository.disconnect();
-                repository.init(App.meta);
-                repository.connect("admin", "admin");
+                repository = App.getInstance().reConnect();
+
             }
             sqlSession.rollback();
             sqlSession.close();
@@ -386,10 +392,7 @@ public class RepositoryController {
             //数据库连接出现问题后kettle内部api资源库连接失效需要捕获异常后重新连接
             e.printStackTrace();
             if (e instanceof KettleException) {
-                Repository appRepo = App.getInstance().getRepository();
-                appRepo.disconnect();
-                appRepo.init(App.getInstance().meta);
-                appRepo.connect("admin", "admin");
+                App.getInstance().reConnect();
             }
         }
     }

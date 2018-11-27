@@ -83,7 +83,6 @@ public class CarteTaskManager {
             } catch (IOException e) {
                 e.printStackTrace();
             }
-            System.out.println(this + ":  ===>  在 carteId: " + cc.getSlave().getHostName() + " 执行: " + urlString + "  结果: " + result);
         }
     }
 
@@ -245,11 +244,12 @@ public class CarteTaskManager {
                 thisJob = jobs.get(0);
                 String jobPath = thisJob.getDirectoryName();
                 //封装executor对象
-                JobMeta jobMeta = RepositoryUtils.loadJobbyPath(jobPath);
+                JobMeta jobMeta = RepositoryUtils.loadJobByPath(jobPath);
                 JsonObject jsonObject = JsonObject.fromObject(executionConfiguration);
                 JobExecutionConfiguration jobExecutionConfiguration = JobExecutionConfigurationCodec.decode(jsonObject, jobMeta);
                 JobExecutor jobExecutor = new JobExecutor(jobExecutionConfiguration, jobMeta);
-                //TODO		把执行需要的参数添加到dataMap	添加定时任务
+
+                //把执行需要的参数添加到dataMap	添加定时任务
                 JobDetail job = newJob(org.kettle.sxdata.util.quartz.JobTimerTask.class).withIdentity(idJobTask + "", JOB_TIMER_TASK_GROUP).build();
                 List<UserEntity> userEntityList = session.selectList("org.kettle.sxdata.dao.UserDao.getUserbyName", "admin");
                 job.getJobDataMap().put("jobExecutor", jobExecutor);

@@ -1,23 +1,14 @@
 package org.kettle.ext;
 
-import java.util.ArrayList;
-
-import javax.sql.DataSource;
-
 import org.apache.commons.dbcp.BasicDataSource;
 import org.kettle.ext.core.PropsUI;
 import org.pentaho.di.core.DBCache;
 import org.pentaho.di.core.RowMetaAndData;
 import org.pentaho.di.core.database.DatabaseMeta;
-import org.pentaho.di.core.logging.DefaultLogLevel;
-import org.pentaho.di.core.logging.KettleLogStore;
-import org.pentaho.di.core.logging.LogChannel;
-import org.pentaho.di.core.logging.LogChannelInterface;
-import org.pentaho.di.core.logging.LogLevel;
+import org.pentaho.di.core.logging.*;
 import org.pentaho.di.core.row.RowMeta;
 import org.pentaho.di.job.JobExecutionConfiguration;
 import org.pentaho.di.repository.LongObjectId;
-import org.pentaho.di.repository.ObjectId;
 import org.pentaho.di.repository.Repository;
 import org.pentaho.di.repository.kdr.KettleDatabaseRepository;
 import org.pentaho.di.repository.kdr.KettleDatabaseRepositoryMeta;
@@ -27,8 +18,11 @@ import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 
+import javax.sql.DataSource;
+import java.util.ArrayList;
+
 /**
- * @description: 应该加载设置
+ * @description: 初始加载设置
  * @author: ZX
  * @date: 2018/11/21 11:40
  */
@@ -66,8 +60,6 @@ public class App implements ApplicationContextAware {
         DefaultLogLevel.setLogLevel(logLevel);
         log.setLogLevel(logLevel);
         KettleLogStore.getAppender().setMaxNrLines(props.getMaxNrLinesInLog());
-
-        // transMeta.setMaxUndo(props.getMaxUndo());
         DBCache.getInstance().setActive(props.useDBCache());
     }
 
@@ -80,17 +72,17 @@ public class App implements ApplicationContextAware {
 
     private Repository repository;
 
+    private Repository defaultRepository;
+
+    private DelegatingMetaStore metaStore;
+
+    private RowMetaAndData variables;
+
+    private ArrayList<String> arguments = new ArrayList<>();
+
     public Repository getRepository() {
         return repository;
     }
-
-    private Repository defaultRepository;
-
-//	public void initDefault(Repository defaultRepo) {
-//		if(this.defaultRepository == null)
-//			this.defaultRepository = defaultRepo;
-//		this.repository = defaultRepo;
-//	}
 
     public Repository getDefaultRepository() {
         return this.defaultRepository;
@@ -103,8 +95,6 @@ public class App implements ApplicationContextAware {
         repository = repo;
     }
 
-    private DelegatingMetaStore metaStore;
-
     public DelegatingMetaStore getMetaStore() {
         return metaStore;
     }
@@ -112,9 +102,6 @@ public class App implements ApplicationContextAware {
     public LogChannelInterface getLog() {
         return log;
     }
-
-    private RowMetaAndData variables = null;
-    private ArrayList<String> arguments = new ArrayList<String>();
 
     public String[] getArguments() {
         return arguments.toArray(new String[arguments.size()]);
@@ -146,40 +133,34 @@ public class App implements ApplicationContextAware {
         try {
             BasicDataSource dataSource = (BasicDataSource) context.getBean(DataSource.class);
             DatabaseMeta dbMeta = new DatabaseMeta();
-//			Connection conn = dataSource.getConnection();
-//			DatabaseMetaData dm = conn.getMetaData();
-//			System.out.println(conn.getCatalog());
-//			System.out.println(dm.getUserName());
-//			System.out.println(dm.getURL());
-//			System.out.println(dm.getDriverName());
-//			System.out.println(dm.getDatabaseProductName());
-//			System.out.println(dm.get);
 
             String url = dataSource.getUrl();
             String hostname = url.substring(url.indexOf("//") + 2, url.lastIndexOf(":"));
             String port = url.substring(url.lastIndexOf(":") + 1, url.lastIndexOf("/"));
             String dbName = url.substring(url.lastIndexOf("/") + 1);
+            String databaseType = dataSource.getConnection().getMetaData().getDatabaseProductName();
 
-            dbMeta.setName("192.168.1.201_kettle");
+            dbMeta.setName(hostname);
             dbMeta.setDBName(dbName);
-            dbMeta.setDatabaseType("MYSQL");
+            dbMeta.setDatabaseType(databaseType);
             dbMeta.setAccessType(0);
             dbMeta.setHostname(hostname);
             dbMeta.setServername(hostname);
             dbMeta.setDBPort(port);
             dbMeta.setUsername(dataSource.getUsername());
             dbMeta.setPassword(dataSource.getPassword());
-            ObjectId objectId = new LongObjectId(100);
-            dbMeta.setObjectId(objectId);
+            dbMeta.setObjectId(new LongObjectId(100));
             dbMeta.setShared(true);
-            dbMeta.addExtraOption(dbMeta.getPluginId(), "characterEncoding", "utf8");
-            dbMeta.addExtraOption(dbMeta.getPluginId(), "useUnicode", "true");
-            dbMeta.addExtraOption(dbMeta.getPluginId(), "autoReconnect", "true");
+            dbMeta.addExtraOption(databaseType, "characterEncoding", "utf8");
+            dbMeta.addExtraOption(databaseType, "characterSetResults", "utf8");
+            dbMeta.addExtraOption(databaseType, "useUnicode", "true");
+            dbMeta.addExtraOption(databaseType, "autoReconnect", "true");
+
             meta = new KettleDatabaseRepositoryMeta();
-            meta.setName("192.168.1.201_kettle");
+            meta.setName(hostname);
             meta.setId("KettleDatabaseRepository");
             meta.setConnection(dbMeta);
-            meta.setDescription("192.168.1.201_kettle");
+            meta.setDescription(hostname);
 
             repository.init(meta);
             repository.connect("admin", "admin");
@@ -187,20 +168,22 @@ public class App implements ApplicationContextAware {
         } catch (Exception e) {
             e.printStackTrace();
         }
-
     }
 
-//	public JsonArray encodeVariables() {
-//		Object[] data = variables.getData();
-//		String[] fields = variables.getRowMeta().getFieldNames();
-//		JsonArray jsonArray = new JsonArray();
-//		for (int i = 0; i < fields.length; i++) {
-//			JsonObject jsonObject = new JsonObject();
-//			jsonObject.put("name", fields[i]);
-//			jsonObject.put("value", data[i].toString());
-//			jsonArray.add(jsonObject);
-//		}
-//		return jsonArray;
-//	}
-
+    /**
+     * 重新连接
+     *
+     * @return
+     */
+    public Repository reConnect() {
+        Repository appRepo = App.getInstance().getRepository();
+        try {
+            appRepo.disconnect();
+            appRepo.init(App.meta);
+            appRepo.connect("admin", "admin");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return appRepo;
+    }
 }

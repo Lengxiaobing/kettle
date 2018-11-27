@@ -19,7 +19,6 @@
 
     <context:component-scan base-package="org.kettle.webapp"/>
 
-
     <mvc:annotation-driven>
         <mvc:message-converters>
             <bean class="org.springframework.http.converter.json.MappingJacksonHttpMessageConverter">
@@ -58,13 +57,17 @@
     <import resource="classpath*:org/kettle/container-*.xml"/>
     <import resource="classpath*:org/kettle/sxdata/container-*.xml"/>
 
+    <!-- Spring使用DBCP连接池 -->
     <bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
         <!-- 数据库连接配置   hadoop-->
         <property name="driverClassName" value="com.mysql.jdbc.Driver"/>
+        <!--  本地-->
         <property name="url"
                   value="jdbc:mysql://127.0.0.1:3306/kettle?useUnicode=true&amp;characterEncoding=utf8&amp;characterSetResults=utf8&amp;autoReconnect=true"/>
         <property name="username" value="root"/>
         <property name="password" value="root"/>
+        <property name="validationQuery" value="SELECT 1"/>
+        <property name="testOnBorrow" value="true"/>
     </bean>
 
     <!-- spring集成MyBatis3 -->
@@ -96,9 +99,8 @@
                 id="pc"/>
         <aop:advisor advice-ref="tx" pointcut-ref="pc"/>
     </aop:config>
+
     <!-- 结束事务配置-->
-
-
     <!--     <mvc:interceptors> -->
     <!--     	<mvc:interceptor> -->
     <!--     		<mvc:mapping path="/**/*.do"/> -->
@@ -109,13 +111,13 @@
     <!--     	</mvc:interceptor> -->
     <!--     </mvc:interceptors> -->
 
-    <!--spring集成quartz-->
-    <!-- 使用MethodInvokingJobDetailFactoryBean，任务类可以不实现Job接口，通过targetMethod指定调用方法-->
+    <!-- spring集成quartz -->
+    <!-- 使用MethodInvokingJobDetailFactoryBean，任务类可以不实现Job接口，通过targetMethod指定调用方法 -->
     <bean class="org.kettle.sxdata.util.quartz.SlaveQuota" id="slaveQuartz"/>
     <bean id="jobDetail" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
         <property name="group" value="job_work"/>
         <property name="name" value="job_work_name"/>
-        <!--&false表示等上一个任务执行完后再开启新的任务-->
+        <!-- &false表示等上一个任务执行完后再开启新的任务 -->
         <property name="concurrent" value="false"/>
         <property name="targetObject">
             <ref bean="slaveQuartz"/>
@@ -124,18 +126,19 @@
             <value>quotaSlaveInfoRepeat</value>
         </property>
     </bean>
+    <!-- 配置 Quartz 调度时使用的触发器 -->
     <bean id="myTrigger" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
         <property name="name" value="work_default_name"/>
         <property name="group" value="work_default"/>
-        <!--引用自上面配置好的jobDetail 这样就会根据自定义的时间规则调度目标方法-->
+        <!-- 引用自上面配置好的jobDetail 这样就会根据自定义的时间规则调度目标方法 -->
         <property name="jobDetail">
             <ref bean="jobDetail"/>
         </property>
         <property name="cronExpression">
-            <value>0 0/15 * * * ?</value>
+            <value>0/1 * * * * ?</value>
         </property>
     </bean>
-    <!--调度工厂  * 0/30 * * * ?  0/5 * * * * ?-->
+    <!-- 调度工厂  * 0/30 * * * ?  0/5 * * * * ? -->
     <bean id="scheduler" class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
         <property name="triggers">
             <list>

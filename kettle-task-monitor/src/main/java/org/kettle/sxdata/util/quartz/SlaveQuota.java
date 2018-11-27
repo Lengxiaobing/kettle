@@ -25,7 +25,7 @@ public class SlaveQuota {
      */
     public static void quotaSlaveInfoRepeat() throws Exception {
         SqlSession session = CarteClient.sessionFactory.openSession();
-        List<CarteInfoEntity> carteInfoList = new ArrayList<CarteInfoEntity>();
+        List<CarteInfoEntity> carteInfoList = new ArrayList<>();
         // 采集所有节点的信息
         List<SlaveEntity> slaves = session.selectList("org.kettle.sxdata.dao.SlaveDao.getAllSlave", "");
         String nDate = StringDateUtil.dateToString(new java.util.Date(), "yyyy-MM-dd HH:mm:ss");
@@ -43,10 +43,15 @@ public class SlaveQuota {
 
             CarteStatusVo vo = CarteStatusVo.parseXml(carteStatus);
             //组装节点指标对象
-            String hostInfo = cc.getSlaveHostInfo();
-            String memFree = hostInfo.split("\\$")[0];
-            String diskFree = hostInfo.split("\\$")[1];
-            String cpuUsage = hostInfo.split("\\$")[2];
+//            String hostInfo = cc.getSlaveHostInfo();
+            // 空闲内存
+//            String memFree = hostInfo.split("\\$")[0];
+            // 磁盘
+//            String diskFree = hostInfo.split("\\$")[1];
+            // cpu使用率
+//            String cpuUsage = hostInfo.split("\\$")[2];
+            // 第三方工具
+//            String extraLib = hostInfo.split("\\$")[3];
 
             CarteInfoEntity carteInfo = CarteInfoEntity.builder()
                     .nDate(StringDateUtil.stringToDate(nDate, "yyyy-MM-dd HH:mm:ss"))
@@ -60,9 +65,10 @@ public class SlaveQuota {
                     .loadAvg((float) vo.getLoadAvg())
                     .finishedJobNum(null)
                     .finishedTransNum(null)
-                    .hostFreeMem(memFree)
-                    .hostCpuUsage(cpuUsage)
-                    .hostFreeDisk(diskFree).build();
+//                    .hostFreeMem(memFree)
+//                    .hostCpuUsage(cpuUsage)
+//                    .hostFreeDisk(diskFree)
+                    .build();
             carteInfoList.add(carteInfo);
         }
 
@@ -72,7 +78,6 @@ public class SlaveQuota {
             result += session.insert("org.kettle.sxdata.dao.CarteInfoDao.insertCarteInfo", carteInfoEntity);
         }
         session.commit();
-        System.out.println("定时采集节点指标信息成功!共更新→" + result + "条数据");
         session.close();
     }
 }

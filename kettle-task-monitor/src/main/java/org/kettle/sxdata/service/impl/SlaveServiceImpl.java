@@ -78,12 +78,12 @@ public class SlaveServiceImpl implements SlaveService {
         JSONObject result = new JSONObject();
         //负载
         JSONObject loadAvg = new JSONObject();
-        //CPU
-        JSONObject cpuUsage = new JSONObject();
+//        //CPU
+//        JSONObject cpuUsage = new JSONObject();
         //线程数
         JSONObject threadNum = new JSONObject();
-        //内存
-        JSONObject freeMem = new JSONObject();
+//        //内存
+//        JSONObject freeMem = new JSONObject();
         //设置起始和结束的时间段
         Calendar calendar = Calendar.getInstance();
         calendar.set(Calendar.HOUR_OF_DAY, calendar.get(Calendar.HOUR_OF_DAY) - 3);
@@ -107,18 +107,19 @@ public class SlaveServiceImpl implements SlaveService {
         threadNumYValue.put("type", "value");
         threadNumYValue.put("min", 0);
         Integer maxThreadNum = 0;
-        //渲染CPU使用率折线图
-        JSONArray cpuUsageDataArray = new JSONArray();
-        JSONObject cpuUsageYValue = new JSONObject();
-        cpuUsageYValue.put("type", "value");
-        cpuUsageYValue.put("min", 0);
-        double maxCpuUsage = 0.0;
-        //渲染空闲内存折线图
-        JSONArray freeMemDataArray = new JSONArray();
-        JSONObject freeMemYValue = new JSONObject();
-        freeMemYValue.put("type", "value");
-        freeMemYValue.put("min", 0);
-        Integer maxFreeMem = 0;
+
+//        //渲染CPU使用率折线图
+//        JSONArray cpuUsageDataArray = new JSONArray();
+//        JSONObject cpuUsageYValue = new JSONObject();
+//        cpuUsageYValue.put("type", "value");
+//        cpuUsageYValue.put("min", 0);
+//        double maxCpuUsage = 0.0;
+//        //渲染空闲内存折线图
+//        JSONArray freeMemDataArray = new JSONArray();
+//        JSONObject freeMemYValue = new JSONObject();
+//        freeMemYValue.put("type", "value");
+//        freeMemYValue.put("min", 0);
+//        Integer maxFreeMem = 0;
 
         for (int i1 = 0; i1 < slaves.size(); i1++) {
             SlaveEntity slave = slaves.get(i1);
@@ -132,29 +133,29 @@ public class SlaveServiceImpl implements SlaveService {
             //获取折线每个点的取值
             float[] loadAvgs = new float[items.size()];
             int[] threadNums = new int[items.size()];
-            double[] cpuUsages = new double[items.size()];
-            int[] freeMems = new int[items.size()];
+//            double[] cpuUsages = new double[items.size()];
+//            int[] freeMems = new int[items.size()];
 
             for (int j1 = 0; j1 < items.size(); j1++) {
                 CarteInfoEntity item = items.get(j1);
                 loadAvgs[j1] = item.getLoadAvg();
                 threadNums[j1] = item.getThreadNum();
-                Double cpuUsageValue = Double.valueOf(item.getHostCpuUsage().trim().substring(0, item.getHostCpuUsage().trim().length() - 1));
-                cpuUsages[j1] = cpuUsageValue;
-                int hostFreeMem = Integer.valueOf(item.getHostFreeMem().trim().substring(0, item.getHostFreeMem().trim().length() - 2));
-                freeMems[j1] = hostFreeMem / 1024;
+//                Double cpuUsageValue = Double.valueOf(item.getHostCpuUsage().trim().substring(0, item.getHostCpuUsage().trim().length() - 1));
+//                cpuUsages[j1] = cpuUsageValue;
+//                int hostFreeMem = Integer.valueOf(item.getHostFreeMem().trim().substring(0, item.getHostFreeMem().trim().length() - 2));
+//                freeMems[j1] = hostFreeMem / 1024;
             }
             //获取每个折线图Y轴所需要的最大值
             float thisSlaveMaxLoadAvg = StringDateUtil.getMaxValueByFloatArray(loadAvgs);
             Integer thisSlaveMaxThreadNum = StringDateUtil.getMaxValueByIntArray(threadNums);
-            double thisSlaveMaxCpuUsage = StringDateUtil.getMaxValueByDoubleArray(cpuUsages);
-            Integer thisSlaveMaxFreeMem = StringDateUtil.getMaxValueByIntArray(freeMems);
-            if (maxCpuUsage < thisSlaveMaxCpuUsage) {
-                maxCpuUsage = thisSlaveMaxCpuUsage;
-            }
-            if (maxFreeMem < thisSlaveMaxFreeMem) {
-                maxFreeMem = thisSlaveMaxFreeMem;
-            }
+//            double thisSlaveMaxCpuUsage = StringDateUtil.getMaxValueByDoubleArray(cpuUsages);
+//            Integer thisSlaveMaxFreeMem = StringDateUtil.getMaxValueByIntArray(freeMems);
+//            if (maxCpuUsage < thisSlaveMaxCpuUsage) {
+//                maxCpuUsage = thisSlaveMaxCpuUsage;
+//            }
+//            if (maxFreeMem < thisSlaveMaxFreeMem) {
+//                maxFreeMem = thisSlaveMaxFreeMem;
+//            }
             if (maxLoadAvg < thisSlaveMaxLoadAvg) {
                 maxLoadAvg = thisSlaveMaxLoadAvg;
             }
@@ -174,18 +175,18 @@ public class SlaveServiceImpl implements SlaveService {
             threadNumData.put("type", "line");
             threadNumData.put("data", threadNums);
             threadNumDataArray.add(threadNumData);
-            //CPU使用率折线图数据
-            JSONObject cpuUsageData = new JSONObject();
-            cpuUsageData.put("name", slave.getHostName());
-            cpuUsageData.put("type", "line");
-            cpuUsageData.put("data", cpuUsages);
-            cpuUsageDataArray.add(cpuUsageData);
-            //空闲内存折线图数据和Y轴
-            JSONObject freeMemData = new JSONObject();
-            freeMemData.put("name", slave.getHostName());
-            freeMemData.put("type", "line");
-            freeMemData.put("data", freeMems);
-            freeMemDataArray.add(freeMemData);
+//            //CPU使用率折线图数据
+//            JSONObject cpuUsageData = new JSONObject();
+//            cpuUsageData.put("name", slave.getHostName());
+//            cpuUsageData.put("type", "line");
+//            cpuUsageData.put("data", cpuUsages);
+//            cpuUsageDataArray.add(cpuUsageData);
+//            //空闲内存折线图数据和Y轴
+//            JSONObject freeMemData = new JSONObject();
+//            freeMemData.put("name", slave.getHostName());
+//            freeMemData.put("type", "line");
+//            freeMemData.put("data", freeMems);
+//            freeMemDataArray.add(freeMemData);
         }
         //负载Y轴最大值
         if (maxLoadAvg <= 5) {
@@ -207,36 +208,36 @@ public class SlaveServiceImpl implements SlaveService {
         } else {
             threadNumYValue.put("max", 1000);
         }
-        //cpu使用率Y轴最大值
-        if (maxCpuUsage <= 1.0) {
-            cpuUsageYValue.put("max", 1.0);
-        } else if (maxCpuUsage <= 2.0) {
-            cpuUsageYValue.put("max", 2.0);
-        } else if (maxCpuUsage <= 5.0) {
-            cpuUsageYValue.put("max", 5.0);
-        } else if (maxCpuUsage <= 10.0) {
-            cpuUsageYValue.put("max", 10.0);
-        } else if (maxCpuUsage <= 20.0) {
-            cpuUsageYValue.put("max", 20.0);
-        } else {
-            cpuUsageYValue.put("max", 50.0);
-        }
-        JSONObject cpuAxisLable = new JSONObject();
-        cpuAxisLable.put("formatter", "{value} %");
-        cpuUsageYValue.put("axisLabel", cpuAxisLable);
-        //空闲内存Y轴最大值
-        if (maxFreeMem <= 1000) {
-            freeMemYValue.put("max", 1000);
-        } else if (maxFreeMem < 2000) {
-            freeMemYValue.put("max", 2000);
-        } else if (maxFreeMem < 5000) {
-            freeMemYValue.put("max", 5000);
-        } else {
-            freeMemYValue.put("max", 10000);
-        }
-        JSONObject freeMemAxisLable = new JSONObject();
-        freeMemAxisLable.put("formatter", "{value} MB");
-        freeMemYValue.put("axisLabel", freeMemAxisLable);
+//        //cpu使用率Y轴最大值
+//        if (maxCpuUsage <= 1.0) {
+//            cpuUsageYValue.put("max", 1.0);
+//        } else if (maxCpuUsage <= 2.0) {
+//            cpuUsageYValue.put("max", 2.0);
+//        } else if (maxCpuUsage <= 5.0) {
+//            cpuUsageYValue.put("max", 5.0);
+//        } else if (maxCpuUsage <= 10.0) {
+//            cpuUsageYValue.put("max", 10.0);
+//        } else if (maxCpuUsage <= 20.0) {
+//            cpuUsageYValue.put("max", 20.0);
+//        } else {
+//            cpuUsageYValue.put("max", 50.0);
+//        }
+//        JSONObject cpuAxisLable = new JSONObject();
+//        cpuAxisLable.put("formatter", "{value} %");
+//        cpuUsageYValue.put("axisLabel", cpuAxisLable);
+//        //空闲内存Y轴最大值
+//        if (maxFreeMem <= 1000) {
+//            freeMemYValue.put("max", 1000);
+//        } else if (maxFreeMem < 2000) {
+//            freeMemYValue.put("max", 2000);
+//        } else if (maxFreeMem < 5000) {
+//            freeMemYValue.put("max", 5000);
+//        } else {
+//            freeMemYValue.put("max", 10000);
+//        }
+//        JSONObject freeMemAxisLable = new JSONObject();
+//        freeMemAxisLable.put("formatter", "{value} MB");
+//        freeMemYValue.put("axisLabel", freeMemAxisLable);
         //负载
         loadAvg.put("Y", loadAvgYValue);
         loadAvg.put("X", xValue);
@@ -247,21 +248,21 @@ public class SlaveServiceImpl implements SlaveService {
         threadNum.put("X", xValue);
         threadNum.put("series", threadNumDataArray);
         threadNum.put("Y", threadNumYValue);
-        //cpu使用率
-        cpuUsage.put("legend", legend);
-        cpuUsage.put("X", xValue);
-        cpuUsage.put("series", cpuUsageDataArray);
-        cpuUsage.put("Y", cpuUsageYValue);
-        //空闲内存
-        freeMem.put("legend", legend);
-        freeMem.put("X", xValue);
-        freeMem.put("series", freeMemDataArray);
-        freeMem.put("Y", freeMemYValue);
+//        //cpu使用率
+//        cpuUsage.put("legend", legend);
+//        cpuUsage.put("X", xValue);
+//        cpuUsage.put("series", cpuUsageDataArray);
+//        cpuUsage.put("Y", cpuUsageYValue);
+//        //空闲内存
+//        freeMem.put("legend", legend);
+//        freeMem.put("X", xValue);
+//        freeMem.put("series", freeMemDataArray);
+//        freeMem.put("Y", freeMemYValue);
         //四个折线图组装的json
         result.put("loadAvg", loadAvg);
         result.put("threadNum", threadNum);
-        result.put("cpuUsage", cpuUsage);
-        result.put("freeMem", freeMem);
+//        result.put("cpuUsage", cpuUsage);
+//        result.put("freeMem", freeMem);
         return result.toString();
     }
 
@@ -281,11 +282,6 @@ public class SlaveServiceImpl implements SlaveService {
         if (null == slaves || slaves.size() < 1) {
             return null;
         }
-       /* try{
-            slaves=setLoadAvgAndStatus(slaves);
-        }catch (Exception e){
-            e.printStackTrace();
-        }*/
         JSONObject result = new JSONObject();
         //设置需要获取指标信息的起止时间段
         if (null == chooseDate || chooseDate == "") {
@@ -305,7 +301,7 @@ public class SlaveServiceImpl implements SlaveService {
         String[] legend = new String[slaves.size()];
         for (int i = 0; i < slaves.size(); i++) {
             SlaveEntity slave = slaves.get(i);
-            List<CarteInfoEntity> items = new ArrayList<CarteInfoEntity>();
+            List<CarteInfoEntity> items;
             if (maxOrAvg.equals("最大值")) {
                 items = carteInfoDao.slaveQuatoByMax(minDate, maxDate, slave.getSlaveId());
             } else {
@@ -327,7 +323,7 @@ public class SlaveServiceImpl implements SlaveService {
             float maxLoadAvg = 0;
             for (int i1 = 0; i1 < slaves.size(); i1++) {
                 SlaveEntity slave = slaves.get(i1);
-                List<CarteInfoEntity> items = new ArrayList<CarteInfoEntity>();
+                List<CarteInfoEntity> items;
                 if (maxOrAvg.equals("最大值")) {
                     items = carteInfoDao.slaveQuatoByMax(minDate, maxDate, slave.getSlaveId());
                 } else {
@@ -358,91 +354,94 @@ public class SlaveServiceImpl implements SlaveService {
             } else {
                 yValue.put("max", 40);
             }
-        } else if (quatoType.equals("CPU利用率")) {
-            Double maxCpuUsage = 0.0;
-            for (int i1 = 0; i1 < slaves.size(); i1++) {
-                SlaveEntity slave = slaves.get(i1);
-                List<CarteInfoEntity> items = new ArrayList<CarteInfoEntity>();
-                if (maxOrAvg.equals("最大值")) {
-                    items = carteInfoDao.slaveQuatoByMax(minDate, maxDate, slave.getSlaveId());
-                } else {
-                    items = carteInfoDao.slaveQuatoByAvg(minDate, maxDate, slave.getSlaveId());
-                }
-                double[] cpuUsages = new double[items.size()];
-                for (int j1 = 0; j1 < items.size(); j1++) {
-                    CarteInfoEntity item = items.get(j1);
-                    Double cpuUsageValue = Double.valueOf(item.getHostCpuUsage().trim().substring(0, item.getHostCpuUsage().trim().length() - 1));
-                    cpuUsages[j1] = cpuUsageValue;
-                }
-                Double thisSlaveMax = StringDateUtil.getMaxValueByDoubleArray(cpuUsages);
-                if (maxCpuUsage < thisSlaveMax) {
-                    maxCpuUsage = thisSlaveMax;
-                }
-                JSONObject cpuUsageData = new JSONObject();
-                cpuUsageData.put("name", slave.getHostName());
-                cpuUsageData.put("type", "line");
-                cpuUsageData.put("data", cpuUsages);
-                series.add(cpuUsageData);
-            }
-            if (maxCpuUsage <= 1.0) {
-                yValue.put("max", 1.0);
-            } else if (maxCpuUsage <= 2.0) {
-                yValue.put("max", 2.0);
-            } else if (maxCpuUsage <= 5.0) {
-                yValue.put("max", 5.0);
-            } else if (maxCpuUsage <= 10.0) {
-                yValue.put("max", 10.0);
-            } else if (maxCpuUsage <= 20.0) {
-                yValue.put("max", 20.0);
-            } else {
-                yValue.put("max", 50.0);
-            }
-            JSONObject cpuAxisLable = new JSONObject();
-            cpuAxisLable.put("formatter", "{value} %");
-            yValue.put("axisLabel", cpuAxisLable);
-        } else if (quatoType.equals("空闲内存")) {
-            Integer maxFreeMem = 0;
-            for (int i1 = 0; i1 < slaves.size(); i1++) {
-                SlaveEntity slave = slaves.get(i1);
-                List<CarteInfoEntity> items = new ArrayList<CarteInfoEntity>();
-                if (maxOrAvg.equals("最大值")) {
-                    items = carteInfoDao.slaveQuatoByMax(minDate, maxDate, slave.getSlaveId());
-                } else {
-                    items = carteInfoDao.slaveQuatoByAvg(minDate, maxDate, slave.getSlaveId());
-                }
-                int[] freeMems = new int[items.size()];
-                for (int j1 = 0; j1 < items.size(); j1++) {
-                    CarteInfoEntity item = items.get(j1);
-                    int hostFreeMem = Integer.valueOf(item.getHostFreeMem());
-                    freeMems[j1] = hostFreeMem / 1024;
-                }
-                Integer thisSlaveMax = StringDateUtil.getMaxValueByIntArray(freeMems);
-                if (thisSlaveMax > maxFreeMem) {
-                    maxFreeMem = thisSlaveMax;
-                }
-                JSONObject freeMemData = new JSONObject();
-                freeMemData.put("name", slave.getHostName());
-                freeMemData.put("type", "line");
-                freeMemData.put("data", freeMems);
-                series.add(freeMemData);
-            }
-            if (maxFreeMem <= 1000) {
-                yValue.put("max", 1000);
-            } else if (maxFreeMem < 2000) {
-                yValue.put("max", 2000);
-            } else if (maxFreeMem < 5000) {
-                yValue.put("max", 5000);
-            } else {
-                yValue.put("max", 10000);
-            }
-            JSONObject freeMemAxisLable = new JSONObject();
-            freeMemAxisLable.put("formatter", "{value} MB");
-            yValue.put("axisLabel", freeMemAxisLable);
-        } else if (quatoType.equals("线程数")) {
+        }
+//        else if (quatoType.equals("CPU利用率")) {
+//            Double maxCpuUsage = 0.0;
+//            for (int i1 = 0; i1 < slaves.size(); i1++) {
+//                SlaveEntity slave = slaves.get(i1);
+//                List<CarteInfoEntity> items;
+//                if (maxOrAvg.equals("最大值")) {
+//                    items = carteInfoDao.slaveQuatoByMax(minDate, maxDate, slave.getSlaveId());
+//                } else {
+//                    items = carteInfoDao.slaveQuatoByAvg(minDate, maxDate, slave.getSlaveId());
+//                }
+//                double[] cpuUsages = new double[items.size()];
+//                for (int j1 = 0; j1 < items.size(); j1++) {
+//                    CarteInfoEntity item = items.get(j1);
+//                    Double cpuUsageValue = Double.valueOf(item.getHostCpuUsage().trim().substring(0, item.getHostCpuUsage().trim().length() - 1));
+//                    cpuUsages[j1] = cpuUsageValue;
+//                }
+//                Double thisSlaveMax = StringDateUtil.getMaxValueByDoubleArray(cpuUsages);
+//                if (maxCpuUsage < thisSlaveMax) {
+//                    maxCpuUsage = thisSlaveMax;
+//                }
+//                JSONObject cpuUsageData = new JSONObject();
+//                cpuUsageData.put("name", slave.getHostName());
+//                cpuUsageData.put("type", "line");
+//                cpuUsageData.put("data", cpuUsages);
+//                series.add(cpuUsageData);
+//            }
+//            if (maxCpuUsage <= 1.0) {
+//                yValue.put("max", 1.0);
+//            } else if (maxCpuUsage <= 2.0) {
+//                yValue.put("max", 2.0);
+//            } else if (maxCpuUsage <= 5.0) {
+//                yValue.put("max", 5.0);
+//            } else if (maxCpuUsage <= 10.0) {
+//                yValue.put("max", 10.0);
+//            } else if (maxCpuUsage <= 20.0) {
+//                yValue.put("max", 20.0);
+//            } else {
+//                yValue.put("max", 50.0);
+//            }
+//            JSONObject cpuAxisLable = new JSONObject();
+//            cpuAxisLable.put("formatter", "{value} %");
+//            yValue.put("axisLabel", cpuAxisLable);
+//        }
+//        else if (quatoType.equals("空闲内存")) {
+//            Integer maxFreeMem = 0;
+//            for (int i1 = 0; i1 < slaves.size(); i1++) {
+//                SlaveEntity slave = slaves.get(i1);
+//                List<CarteInfoEntity> items;
+//                if (maxOrAvg.equals("最大值")) {
+//                    items = carteInfoDao.slaveQuatoByMax(minDate, maxDate, slave.getSlaveId());
+//                } else {
+//                    items = carteInfoDao.slaveQuatoByAvg(minDate, maxDate, slave.getSlaveId());
+//                }
+//                int[] freeMems = new int[items.size()];
+//                for (int j1 = 0; j1 < items.size(); j1++) {
+//                    CarteInfoEntity item = items.get(j1);
+//                    int hostFreeMem = Integer.valueOf(item.getHostFreeMem());
+//                    freeMems[j1] = hostFreeMem / 1024;
+//                }
+//                Integer thisSlaveMax = StringDateUtil.getMaxValueByIntArray(freeMems);
+//                if (thisSlaveMax > maxFreeMem) {
+//                    maxFreeMem = thisSlaveMax;
+//                }
+//                JSONObject freeMemData = new JSONObject();
+//                freeMemData.put("name", slave.getHostName());
+//                freeMemData.put("type", "line");
+//                freeMemData.put("data", freeMems);
+//                series.add(freeMemData);
+//            }
+//            if (maxFreeMem <= 1000) {
+//                yValue.put("max", 1000);
+//            } else if (maxFreeMem < 2000) {
+//                yValue.put("max", 2000);
+//            } else if (maxFreeMem < 5000) {
+//                yValue.put("max", 5000);
+//            } else {
+//                yValue.put("max", 10000);
+//            }
+//            JSONObject freeMemAxisLable = new JSONObject();
+//            freeMemAxisLable.put("formatter", "{value} MB");
+//            yValue.put("axisLabel", freeMemAxisLable);
+//        }
+        else if (quatoType.equals("线程数")) {
             Integer maxThreadNum = 0;
             for (int i1 = 0; i1 < slaves.size(); i1++) {
                 SlaveEntity slave = slaves.get(i1);
-                List<CarteInfoEntity> items = new ArrayList<CarteInfoEntity>();
+                List<CarteInfoEntity> items;
                 if (maxOrAvg.equals("最大值")) {
                     items = carteInfoDao.slaveQuatoByMax(minDate, maxDate, slave.getSlaveId());
                 } else {
@@ -472,48 +471,50 @@ public class SlaveServiceImpl implements SlaveService {
             } else {
                 yValue.put("max", 1000);
             }
-        } else if (quatoType.equals("空闲硬盘")) {
-            Integer maxFreeDisk = 0;
-            for (int i1 = 0; i1 < slaves.size(); i1++) {
-                SlaveEntity slave = slaves.get(i1);
-                List<CarteInfoEntity> items = new ArrayList<CarteInfoEntity>();
-                if (maxOrAvg.equals("最大值")) {
-                    items = carteInfoDao.slaveQuatoByMax(minDate, maxDate, slave.getSlaveId());
-                } else {
-                    items = carteInfoDao.slaveQuatoByAvg(minDate, maxDate, slave.getSlaveId());
-                }
-                int[] hostFreeDisks = new int[items.size()];
-                for (int j1 = 0; j1 < items.size(); j1++) {
-                    CarteInfoEntity item = items.get(j1);
-                    hostFreeDisks[j1] = Integer.valueOf(item.getHostFreeDisk());
-                }
-                Integer thisSlaveMax = StringDateUtil.getMaxValueByIntArray(hostFreeDisks);
-                if (thisSlaveMax > maxFreeDisk) {
-                    maxFreeDisk = thisSlaveMax;
-                }
-                JSONObject freeDiskData = new JSONObject();
-                freeDiskData.put("name", slave.getHostName());
-                freeDiskData.put("type", "line");
-                freeDiskData.put("data", hostFreeDisks);
-                series.add(freeDiskData);
-            }
-            if (maxFreeDisk <= 50) {
-                yValue.put("max", 50);
-            } else if (maxFreeDisk <= 100) {
-                yValue.put("max", 100);
-            } else if (maxFreeDisk <= 200) {
-                yValue.put("max", 200);
-            } else if (maxFreeDisk <= 500) {
-                yValue.put("max", 500);
-            } else if (maxFreeDisk <= 1000) {
-                yValue.put("max", 1000);
-            } else {
-                yValue.put("max", 2000);
-            }
-            JSONObject diskAxisLable = new JSONObject();
-            diskAxisLable.put("formatter", "{value} GB");
-            yValue.put("axisLabel", diskAxisLable);
-        } else if (quatoType.equals("作业数")) {
+        }
+//        else if (quatoType.equals("空闲硬盘")) {
+//            Integer maxFreeDisk = 0;
+//            for (int i1 = 0; i1 < slaves.size(); i1++) {
+//                SlaveEntity slave = slaves.get(i1);
+//                List<CarteInfoEntity> items;
+//                if (maxOrAvg.equals("最大值")) {
+//                    items = carteInfoDao.slaveQuatoByMax(minDate, maxDate, slave.getSlaveId());
+//                } else {
+//                    items = carteInfoDao.slaveQuatoByAvg(minDate, maxDate, slave.getSlaveId());
+//                }
+//                int[] hostFreeDisks = new int[items.size()];
+//                for (int j1 = 0; j1 < items.size(); j1++) {
+//                    CarteInfoEntity item = items.get(j1);
+//                    hostFreeDisks[j1] = Integer.valueOf(item.getHostFreeDisk());
+//                }
+//                Integer thisSlaveMax = StringDateUtil.getMaxValueByIntArray(hostFreeDisks);
+//                if (thisSlaveMax > maxFreeDisk) {
+//                    maxFreeDisk = thisSlaveMax;
+//                }
+//                JSONObject freeDiskData = new JSONObject();
+//                freeDiskData.put("name", slave.getHostName());
+//                freeDiskData.put("type", "line");
+//                freeDiskData.put("data", hostFreeDisks);
+//                series.add(freeDiskData);
+//            }
+//            if (maxFreeDisk <= 50) {
+//                yValue.put("max", 50);
+//            } else if (maxFreeDisk <= 100) {
+//                yValue.put("max", 100);
+//            } else if (maxFreeDisk <= 200) {
+//                yValue.put("max", 200);
+//            } else if (maxFreeDisk <= 500) {
+//                yValue.put("max", 500);
+//            } else if (maxFreeDisk <= 1000) {
+//                yValue.put("max", 1000);
+//            } else {
+//                yValue.put("max", 2000);
+//            }
+//            JSONObject diskAxisLable = new JSONObject();
+//            diskAxisLable.put("formatter", "{value} GB");
+//            yValue.put("axisLabel", diskAxisLable);
+//        }
+        else if (quatoType.equals("作业数")) {
             Integer maxJobNum = 0;
             for (int i1 = 0; i1 < slaves.size(); i1++) {
                 SlaveEntity slave = slaves.get(i1);
@@ -636,7 +637,7 @@ public class SlaveServiceImpl implements SlaveService {
      */
     @Override
     public String slaveQuatoByCondition(String quatoType, String viewType, String maxOrAvg, String chooseDate, String userGroupName) throws Exception {
-        String result = null;
+        String result;
         if (viewType.equals("折线图")) {
             result = this.slaveQuatoLineChart(quatoType, maxOrAvg, chooseDate, userGroupName);
         } else if (viewType.equals("柱形图")) {
@@ -655,7 +656,7 @@ public class SlaveServiceImpl implements SlaveService {
      * @throws Exception
      */
     public List<SlaveEntity> setLoadAvgAndStatus(List<SlaveEntity> slaves) throws Exception {
-        List<SlaveEntity> result = new ArrayList<SlaveEntity>();
+        List<SlaveEntity> result = new ArrayList<>();
         for (SlaveEntity slave : slaves) {
             //对取出的节点密码进行解码重新赋值
             slave.setPassword(KettleEncr.decryptPasswd(slave.getPassword()));
@@ -734,6 +735,15 @@ public class SlaveServiceImpl implements SlaveService {
         return minSlave;
     }
 
+    /**
+     * 根据页面信息查询节点
+     *
+     * @param start
+     * @param limit
+     * @param userGroupName
+     * @return
+     * @throws Exception
+     */
     @Override
     public PageforBean findSlaveByPageInfo(Integer start, Integer limit, String userGroupName) throws Exception {
 
@@ -743,8 +753,8 @@ public class SlaveServiceImpl implements SlaveService {
             slave.setPassword(KettleEncr.decryptPasswd(slave.getPassword()));
             CarteClient cc = new CarteClient(slave);
 
-            String status = null;
-            CarteStatusVo vo = null;
+            String status;
+            CarteStatusVo vo;
             status = cc.getStatusOrNull();
             boolean dbActive = !cc.isDBActive();
             if (status != null) {
@@ -764,8 +774,8 @@ public class SlaveServiceImpl implements SlaveService {
                 }
 
                 //TODO 已完成的作业/转换需要从日志表获取
-                // slave.setFinishJobNum(XXXX);
-                //slave.setFinishTransNum(XXX);
+//                slave.setFinishJobNum(XXXX);
+//                slave.setFinishTransNum(XXX);
             } else {
                 slave.setLoadAvg(0);
                 slave.setStatus("<font color='red'>节点异常</font>");
@@ -779,16 +789,29 @@ public class SlaveServiceImpl implements SlaveService {
         return result;
     }
 
+    /**
+     * 删除节点
+     *
+     * @param slaveId
+     * @throws Exception
+     */
     @Override
     public void deleteSlave(Integer slaveId) throws Exception {
-       /* ObjectId objectId=new LongObjectId(slaveId);
-        App.getInstance().getRepository().deleteSlave(objectId);*/
+//        ObjectId objectId=new LongObjectId(slaveId);
+//        App.getInstance().getRepository().deleteSlave(objectId);
         slaveDao.deleteTransSlave(slaveId);
         slaveDao.deleteSlaveUserGroup(slaveId);
         slaveDao.deleteSlaveServer(slaveId);
     }
 
-
+    /**
+     * 节点体检
+     *
+     * @param hostName
+     * @param port
+     * @return
+     * @throws Exception
+     */
     @Override
     public String slaveTest(String hostName, String port) throws Exception {
         JSONObject json = new JSONObject();
@@ -803,29 +826,32 @@ public class SlaveServiceImpl implements SlaveService {
         } else {
             json.put("carteStatus", "N");
         }
-      /*  if(isdbActive){
-            json.put("slaveRepo","Y");
-        }else{
-            json.put("slaveRepo","N");
-        }*/
         if (slaveNetStatus) {
             json.put("slaveNetwork", "Y");
         } else {
             json.put("slaveNetwork", "N");
         }
-        String jarArray = "";
-        try {
-            boolean isdbActive = !cc.isDBActive();
-            String hostInfo = cc.getSlaveHostInfo();
-            if (!StringDateUtil.isEmpty(hostInfo)) {
-                jarArray = hostInfo.split("\\$")[3];
-            }
-        } catch (Exception e) {
-        }
-        json.put("slaveJarSupport", jarArray);
+//        String jarArray = "";
+//        try {
+//            boolean isdbActive = !cc.isDBActive();
+//            String hostInfo = cc.getSlaveHostInfo();
+//            if (!StringDateUtil.isEmpty(hostInfo)) {
+//                jarArray = hostInfo.split("\\$")[3];
+//            }
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
+//        json.put("slaveJarSupport", jarArray);
         return json.toString();
     }
 
+    /**
+     * 新增节点
+     *
+     * @param request
+     * @return
+     * @throws Exception
+     */
     @Override
     public String addSlave(HttpServletRequest request) throws Exception {
         String result = "Y";
@@ -840,12 +866,10 @@ public class SlaveServiceImpl implements SlaveService {
         }
         slave.setSlaveId(id);
         //判断是否存在相同的节点
-        List<SlaveEntity> items = slaveDao.getAllSlave("");
-        for (SlaveEntity item : items) {
-            if (item.getHostName().equals(slave.getHostName()) && item.getPort().equals(slave.getPort())) {
-                result = "N";
-                return result;
-            }
+        List<SlaveEntity> list = slaveDao.getSlaveByHostNameAndPortOrName(slave.getHostName(), slave.getPort(), slave.getName());
+        if (list.size() > 1) {
+            result = "N";
+            return result;
         }
         slaveDao.addSlave(slave);
         //判断添加节点的是admin还是普通管理员
@@ -873,31 +897,36 @@ public class SlaveServiceImpl implements SlaveService {
         return result;
     }
 
+    /**
+     * 修改节点
+     *
+     * @param request
+     * @return
+     * @throws Exception
+     */
     @Override
     public String updateSlave(HttpServletRequest request) throws Exception {
         String result = "Y";
         JSONObject json = JSONObject.fromObject(request.getParameter("slaveServer"));
-        SlaveEntity targetSlave = (SlaveEntity) JSONObject.toBean(json, SlaveEntity.class);
-        targetSlave.setPassword(KettleEncr.encryptPassword(targetSlave.getPassword()));
+        SlaveEntity slave = (SlaveEntity) JSONObject.toBean(json, SlaveEntity.class);
+        slave.setPassword(KettleEncr.encryptPassword(slave.getPassword()));
         //判断是否存在相同节点
-        List<SlaveEntity> items = slaveDao.getAllSlave("");
-        for (SlaveEntity item : items) {
-            if (item.getSlaveId().toString().equals(targetSlave.getSlaveId().toString())) {
-                continue;
-            }
-            if (item.getHostName().equals(targetSlave.getHostName()) && item.getPort().equals(targetSlave.getPort())) {
-                result = "N";
-                return result;
-            }
-            if (item.getName().equals(targetSlave.getName())) {
-                result = "N";
-                return result;
-            }
+        List<SlaveEntity> list = slaveDao.getSlaveByHostNameAndPortOrName(slave.getHostName(), slave.getPort(), slave.getName());
+        if (list.size() > 1) {
+            result = "N";
+            return result;
         }
-        slaveDao.updateSlaveServer(targetSlave);
+        slaveDao.updateSlaveServer(slave);
         return result;
     }
 
+    /**
+     * 根据节点id获取节点
+     *
+     * @param id
+     * @return
+     * @throws Exception
+     */
     @Override
     public SlaveEntity getSlaveByHostName(Integer id) throws Exception {
         return slaveDao.getSlaveById(id);

@@ -83,8 +83,6 @@ public class JobEntryFTPS_PUT extends AbstractJobEntry{
 		e.setAttribute("proxyserverusername", jobEntryFTPSPUT.getProxyUsername());
 		e.setAttribute("proxyserverpwd", jobEntryFTPSPUT.getProxyPassword());
 		e.setAttribute("connectiontype", FTPSConnection.getConnectionTypeDesc(jobEntryFTPSPUT.getConnectionType()));
-//		System.out.println( "得到的FTP描述 信息：：：：：\n"+FTPSConnection.getConnectionTypeDesc(jobEntryFTPSPUT.getConnectionType()));
-//		jobEntryFTPSPUT.getc
 
 		//一般----高级设置
 		e.setAttribute("binarymode", jobEntryFTPSPUT.isBinaryMode() ?"Y":"N");

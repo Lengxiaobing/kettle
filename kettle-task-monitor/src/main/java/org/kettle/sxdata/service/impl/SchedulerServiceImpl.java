@@ -285,9 +285,6 @@ public class SchedulerServiceImpl implements SchedulerService {
                     .startAt(date)
                     .withSchedule(simpleSchedule().withIntervalInMinutes(intervalMinutes).repeatForever())
                     .build();
-//            oldtrigger = newTrigger().withIdentity(taskJobId + "trigger", CarteTaskManager.JOB_TIMER_TASK_GROUP).
-//                    withSchedule(cronSchedule("0 " + "*//*" + intervalMinutes + " * * * ?")).build();
-//            System.out.println("* " + "*//*" + intervalMinutes + " * * * ?");
         } else if (type.equals("每天执行")) {
             Integer minutesByDay = Integer.valueOf(params.get("minute").toString());
             Integer hourByDay = Integer.valueOf(params.get("hour").toString());

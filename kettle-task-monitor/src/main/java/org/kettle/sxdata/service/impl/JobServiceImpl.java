@@ -198,6 +198,12 @@ public class JobServiceImpl implements JobService {
         repository.deleteJob(id);
     }
 
+    /**
+     * 执行job
+     * @param path
+     * @param slaveId
+     * @throws Exception
+     */
     @Override
     public void executeJob(String path, Integer slaveId) throws Exception {
         //获取用户信息
@@ -223,6 +229,7 @@ public class JobServiceImpl implements JobService {
      * @param willAddJobTimer
      * @return
      */
+    @Override
     public boolean judgeJobIsAlike(JobTimeSchedulerEntity willAddJobTimer) {
         boolean flag = false;
         List<JobTimeSchedulerEntity> jobs = jobSchedulerDao.getAllTimerJob("");
@@ -345,7 +352,7 @@ public class JobServiceImpl implements JobService {
     }
 
     /**
-     * 定时作业
+     * 定时作业配置
      *
      * @param params
      * @param request
@@ -402,7 +409,7 @@ public class JobServiceImpl implements JobService {
     }
 
     /**
-     * 定时作业
+     * 添加定时作业
      *
      * @param graphXml
      * @param executionConfiguration
@@ -439,6 +446,13 @@ public class JobServiceImpl implements JobService {
         CarteTaskManager.jobTimerMap.remove(loginUser.getLogin());
     }
 
+    /**
+     * 根据name获取job
+     *
+     * @param jobName
+     * @return
+     * @throws Exception
+     */
     @Override
     public JobEntity getJobByName(String jobName) throws Exception {
         JobEntity job = jobDao.getJobByName(jobName);
@@ -447,6 +461,13 @@ public class JobServiceImpl implements JobService {
         return this.getJobPath(jobs).get(0);
     }
 
+    /**
+     * 修改作业名称
+     *
+     * @param oldName
+     * @param newName
+     * @return
+     */
     @Override
     public boolean updateJobName(String oldName, String newName) {
         //修改作业名前先判断新的作业名是否已存在

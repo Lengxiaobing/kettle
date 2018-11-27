@@ -423,14 +423,14 @@ public class TaskController {
                 + "\"cluster_show_trans\":\"N\",\"parameters\":[],"
                 + "\"variables\":[{\"name\":\"Internal.Entry.Current.Directory\",\"value\":\"/\"},{\"name\":\"Internal.Job.Filename.Directory\",\"value\":\"Parent Job File Directory\"},{\"name\":\"Internal.Job.Filename.Name\",\"value\":\"Parent Job Filename\"},{\"name\":\"Internal.Job.Name\",\"value\":\"Parent Job Name\"},{\"name\":\"Internal.Job.Repository.Directory\",\"value\":\"Parent Job Repository Directory\"}],"
                 + "\"arguments\":[],\"safe_mode\":\"N\",\"log_level\":\"Basic\",\"clear_log\":\"Y\",\"gather_metrics\":\"Y\",\"log_file\":\"N\",\"log_file_append\":\"N\",\"show_subcomponents\":\"Y\""
-                + ",\"create_parent_folder\":\"N\",\"remote_server\":\"192.168.1.201\",\"replay_date\":\"\"}";
+                + ",\"create_parent_folder\":\"N\",\"remote_server\":\"ip\",\"replay_date\":\"\"}";
         JSONObject json = JSONObject.fromObject(config);
         json.put("remote_server", minSlave.getHostName());
         if (minSlave == null) {
             throw new Exception("当前无可用的正常节点!");
         } else {
             if (flag.equals("job")) {
-                JobMeta jobMeta = RepositoryUtils.loadJobbyPath(path);
+                JobMeta jobMeta = RepositoryUtils.loadJobByPath(path);
                 JsonObject jsonObject = JsonObject.fromObject(json.toString());
                 JobExecutionConfiguration jobExecutionConfiguration = JobExecutionConfigurationCodec.decode(jsonObject, jobMeta);
                 JobExecutor jobExecutor = JobExecutor.initExecutor(jobExecutionConfiguration, jobMeta);
@@ -523,7 +523,7 @@ public class TaskController {
             String graphXml = codec.encode(transMeta);
             jsonObject.put("graphXml", StringEscapeHelper.encode(graphXml));
         } else if (type.equals("job")) {
-            JobMeta jobMeta = RepositoryUtils.loadJobbyPath(taskName);
+            JobMeta jobMeta = RepositoryUtils.loadJobByPath(taskName);
             jsonObject.put("GraphType", "JobGraph");
 
             GraphCodec codec = (GraphCodec) PluginFactory.getBean(GraphCodec.JOB_CODEC);

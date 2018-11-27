@@ -146,6 +146,7 @@ function slaveManager(secondGuidePanel) {
         new Ext.grid.RowNumberer(),//行序号生成器,会为每一行生成一个行号
         sm2,
         {header: "slaveId", dataIndex: "slaveId", align: "center"},
+        {header: "服务器名称", dataIndex: "name", align: "center"},
         {header: "主机名", dataIndex: "hostName", align: "center"},
         {header: "端口", dataIndex: "port", align: "center"},
         {header: "负载指数", dataIndex: "loadAvg", tooltip: "这是负载指数", align: "center"},
@@ -161,6 +162,7 @@ function slaveManager(secondGuidePanel) {
 
     var slaveRecord = Ext.data.Record.create([
         {name: "slaveId", type: "string", mapping: "slaveId"},
+        {name: "name", type: "string", mapping: "name"},
         {name: "hostName", type: "string", mapping: "hostName"},
         {name: "port", type: "string", mapping: "port"},
         {name: "loadAvg", type: "string", mapping: "loadAvg"},
@@ -255,9 +257,9 @@ function slaveManager(secondGuidePanel) {
 //弹出展现所有节点指标信息的容器
 function quatoWindow(slaveGridPanel) {
     var windowHTML = "<div id='main1' style='height:250px;width:500px;display:inline-block;'></div>" +
-        "<div id='main2' style='height:250px;width:500px;display:inline-block;'></div>" +
-        "<div id='main3' style='height:250px;width:500px;display:inline-block;'></div>" +
-        "<div id='main4' style='height:250px;width:500px;display:inline-block;'></div>";
+        "<div id='main2' style='height:250px;width:500px;display:inline-block;'></div>";
+        // "<div id='main3' style='height:250px;width:500px;display:inline-block;'></div>" +
+        // "<div id='main4' style='height:250px;width:500px;display:inline-block;'></div>";
     var carteInfoWindow = new Ext.Window({
         title: "节点指标",
         width: 1080,
@@ -289,11 +291,14 @@ function getQuatoInfo(carteInfoWindow, slaveGridPanel) {
 
 //生成节点指标的折线图 包含4个指标项
 function showSlaveQuato(result) {
-
+    // 负载情况
     var myChart1 = echarts.init(document.getElementById('main1'));
+    // 线程数
     var myChart2 = echarts.init(document.getElementById('main2'));
-    var myChart3 = echarts.init(document.getElementById('main3'));
-    var myChart4 = echarts.init(document.getElementById('main4'));
+    // 空闲内存
+    // var myChart3 = echarts.init(document.getElementById('main3'));
+    // CPU利用率
+    // var myChart4 = echarts.init(document.getElementById('main4'));
     option1 = {
         title: {
             text: '负载情况'
@@ -344,60 +349,60 @@ function showSlaveQuato(result) {
         yAxis: result.threadNum.Y,
         series: result.threadNum.series
     };
-    option3 = {
-        title: {
-            text: '空闲内存'
-        },
-        tooltip: {
-            trigger: 'axis'
-        },
-        legend: {
-            data: result.freeMem.legend
-        },
-        grid: {
-            left: '3%',
-            right: '4%',
-            bottom: '3%',
-            containLabel: true
-        },
-        toolbox: {
-            feature: {
-                saveAsImage: {}
-            }
-        },
-        xAxis: result.freeMem.X,
-        yAxis: result.freeMem.Y,
-        series: result.freeMem.series
-    };
-    option4 = {
-        title: {
-            text: 'CPU利用率'
-        },
-        tooltip: {
-            trigger: 'axis'
-        },
-        legend: {
-            data: result.cpuUsage.legend
-        },
-        grid: {
-            left: '3%',
-            right: '4%',
-            bottom: '3%',
-            containLabel: true
-        },
-        toolbox: {
-            feature: {
-                saveAsImage: {}
-            }
-        },
-        xAxis: result.cpuUsage.X,
-        yAxis: result.cpuUsage.Y,
-        series: result.cpuUsage.series
-    };
+    // option3 = {
+    //     title: {
+    //         text: '空闲内存'
+    //     },
+    //     tooltip: {
+    //         trigger: 'axis'
+    //     },
+    //     legend: {
+    //         data: result.freeMem.legend
+    //     },
+    //     grid: {
+    //         left: '3%',
+    //         right: '4%',
+    //         bottom: '3%',
+    //         containLabel: true
+    //     },
+    //     toolbox: {
+    //         feature: {
+    //             saveAsImage: {}
+    //         }
+    //     },
+    //     xAxis: result.freeMem.X,
+    //     yAxis: result.freeMem.Y,
+    //     series: result.freeMem.series
+    // };
+    // option4 = {
+    //     title: {
+    //         text: 'CPU利用率'
+    //     },
+    //     tooltip: {
+    //         trigger: 'axis'
+    //     },
+    //     legend: {
+    //         data: result.cpuUsage.legend
+    //     },
+    //     grid: {
+    //         left: '3%',
+    //         right: '4%',
+    //         bottom: '3%',
+    //         containLabel: true
+    //     },
+    //     toolbox: {
+    //         feature: {
+    //             saveAsImage: {}
+    //         }
+    //     },
+    //     xAxis: result.cpuUsage.X,
+    //     yAxis: result.cpuUsage.Y,
+    //     series: result.cpuUsage.series
+    // };
     myChart1.setOption(option1);
     myChart2.setOption(option2);
-    myChart3.setOption(option3);
-    myChart4.setOption(option4);
+    // myChart3.setOption(option3);
+    // myChart4.setOption(option4);
 }
 
 //节点体检

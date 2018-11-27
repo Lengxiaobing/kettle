@@ -41,6 +41,32 @@ public class CarteClient implements ApplicationContextAware {
     public static String hostName;
     public static DefaultSqlSessionFactory sessionFactory;
 
+    /**
+     * Kettle carte服务 servlet引用地址(统一收集于此处)
+     */
+    public final static String URL_SUF = "?xml=Y";
+    public final static String CARTE_STATUS = GetStatusServlet.CONTEXT_PATH;
+    /**
+     * 新版kettle已去掉该API，Kettle5.4.0.1版映入的
+     */
+    public final static String SLAVE_STATUS = "/kettle/slaveMonitor";
+    public final static String TRANS_STATUS = GetTransStatusServlet.CONTEXT_PATH;
+    public final static String JOB_STATUS = GetJobStatusServlet.CONTEXT_PATH;
+    public final static String RUN_JOB = RunJobServlet.CONTEXT_PATH;
+    public final static String EXECREMOTE_JOB = ExecuteJobServlet.CONTEXT_PATH;
+    public final static String EXECREMOTE_TRANS = ExecuteTransServlet.CONTEXT_PATH;
+    public final static String STOP_TRANS = StopTransServlet.CONTEXT_PATH;
+    public final static String STOP_JOB = StopJobServlet.CONTEXT_PATH;
+    public final static String REMOVE_TRANS = RemoveTransServlet.CONTEXT_PATH;
+    public final static String REMOVE_JOB = RemoveJobServlet.CONTEXT_PATH;
+    public final static String PAUSE_TRANS = PauseTransServlet.CONTEXT_PATH;
+
+    /**
+     * 设置应用上下文
+     *
+     * @param applicationContext
+     * @throws BeansException
+     */
     @Override
     public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
         BasicDataSource dataSource = (BasicDataSource) applicationContext.getBean("dataSource");
@@ -59,24 +85,6 @@ public class CarteClient implements ApplicationContextAware {
             e.printStackTrace();
         }
     }
-
-
-    public final static String URL_SUF = "?xml=Y";
-    /**
-     * Kettle carte服务 servlet引用地址(统一收集于此处)
-     */
-    public final static String CARTE_STATUS = GetStatusServlet.CONTEXT_PATH;
-    public final static String SLAVE_STATUS = "/kettle/slaveMonitor";
-    public final static String TRANS_STATUS = GetTransStatusServlet.CONTEXT_PATH;
-    public final static String JOB_STATUS = GetJobStatusServlet.CONTEXT_PATH;
-    public final static String RUN_JOB = RunJobServlet.CONTEXT_PATH;
-    public final static String EXECREMOTE_JOB = ExecuteJobServlet.CONTEXT_PATH;
-    public final static String EXECREMOTE_TRANS = ExecuteTransServlet.CONTEXT_PATH;
-    public final static String STOP_TRANS = StopTransServlet.CONTEXT_PATH;
-    public final static String STOP_JOB = StopJobServlet.CONTEXT_PATH;
-    public final static String REMOVE_TRANS = RemoveTransServlet.CONTEXT_PATH;
-    public final static String REMOVE_JOB = RemoveJobServlet.CONTEXT_PATH;
-    public final static String PAUSE_TRANS = PauseTransServlet.CONTEXT_PATH;
 
     public CarteClient(SlaveEntity slave) {
         this.httpUrl = "http://" + slave.getHostName() + ":" + slave.getPort();
@@ -132,6 +140,13 @@ public class CarteClient implements ApplicationContextAware {
         return SlaveServerTransStatus.fromXML(getTransStatus(transCarteId)).getLoggingString();
     }
 
+    /**
+     * 停止某个转换
+     *
+     * @param transId
+     * @return
+     * @throws Exception
+     */
     public String stopTrans(String transId) throws Exception {
         String urlString = httpUrl + STOP_TRANS + "/?" + "xml=Y&id=" + transId;
         return doGet(urlString);
@@ -153,18 +168,32 @@ public class CarteClient implements ApplicationContextAware {
         }
     }
 
+    /**
+     * 停止作业
+     *
+     * @param jobId
+     * @return
+     * @throws Exception
+     */
     public String stopJob(String jobId) throws Exception {
         String urlString = httpUrl + STOP_JOB + "/?" + "xml=Y&id=" + jobId;
         return doGet(urlString);
     }
 
+    /**
+     * 获取转换状态
+     *
+     * @param transId
+     * @return
+     * @throws Exception
+     */
     public String getTransStatus(String transId) throws Exception {
         String urlString = httpUrl + TRANS_STATUS + "?xml=Y&id=" + transId;
         return doGet(urlString);
     }
 
     public String getStatusOrNull() {
-        boolean flag = false;
+        boolean flag;
         String status = null;
         try {
             status = getStatus();
