@@ -133,7 +133,7 @@ public class SlaveController {
             }
             List<SlaveEntity> slaves = slaveService.getAllSlave(userGroupName);
             for (int i = 0; i < slaves.size(); i++) {
-                String thisSlaveJson = "";
+                String thisSlaveJson;
                 String host = "\"" + slaves.get(i).getHostName() + "\"";
                 String hostId = "\"" + "hostId" + "\"";
                 String hostName = "\"" + "hostName" + "\"";

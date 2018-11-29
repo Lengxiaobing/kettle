@@ -213,11 +213,7 @@ public class SchedulerServiceImpl implements SchedulerService {
      */
     @Override
     public PageforBean getAllSchedulerByPage(int start, int limit, Integer typeId, String hostName, String jobName, String userGroupName) throws Exception {
-        if (!StringDateUtil.isEmpty(hostName)) {
-            SlaveEntity slave = slaveDao.getSlaveByHostName(hostName);
-            hostName = slave.getSlaveId() + "_" + hostName;
-        }
-        List<JobTimeSchedulerEntity> jobs = schedulerDao.getTimerJobByPage(start, limit, typeId, hostName,jobName, userGroupName);
+        List<JobTimeSchedulerEntity> jobs = schedulerDao.getTimerJobByPage(start, limit, typeId, hostName, jobName, userGroupName);
         for (JobTimeSchedulerEntity job : jobs) {
             int index = job.getSlaves().indexOf("_");
             job.setHostName(job.getSlaves().substring(index + 1));
