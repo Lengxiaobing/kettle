@@ -1,7 +1,7 @@
 package org.kettle.ext.trans.steps;
 
-import java.util.List;
-
+import com.mxgraph.model.mxCell;
+import com.mxgraph.util.mxUtils;
 import org.kettle.ext.core.PropsUI;
 import org.kettle.ext.trans.step.AbstractStep;
 import org.kettle.ext.utils.JsonArray;
@@ -15,8 +15,7 @@ import org.springframework.stereotype.Component;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
-import com.mxgraph.model.mxCell;
-import com.mxgraph.util.mxUtils;
+import java.util.List;
 
 @Component("CheckSum")
 @Scope("prototype")
@@ -25,7 +24,7 @@ public class CheckSum extends AbstractStep {
 	@Override
 	public void decode(StepMetaInterface stepMetaInterface, mxCell cell, List<DatabaseMeta> databases, IMetaStore metaStore) throws Exception {
 		CheckSumMeta checkSumMeta = (CheckSumMeta) stepMetaInterface;
-		
+
 		String checkSumType = cell.getAttribute("checksumtype");
 		int type=0;
 		for(String str : CheckSumMeta.checksumtypeCodes){

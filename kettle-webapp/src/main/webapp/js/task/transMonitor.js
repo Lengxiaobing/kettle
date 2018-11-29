@@ -195,7 +195,8 @@ function  transCompositionImg(){
 
     var grid=Ext.getCmp("transPanel");
     var secondGuidePanel=Ext.getCmp("secondGuidePanel");
-    var taskName=grid.getSelectionModel().getSelected().get("directoryName");//被选中的任务路径
+    //被选中的任务路径
+    var taskName=grid.getSelectionModel().getSelected().get("directoryName");
 
     Ext.Ajax.request({
         url: GetUrl('task/detail.do'),

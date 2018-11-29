@@ -115,7 +115,7 @@
         <dependency>
             <groupId>org.tinyjee.jgraphx</groupId>
             <artifactId>jgraphx</artifactId>
-            <version>1.10.1.3</version>
+            <version>3.4.1.3</version>
         </dependency>
 
         <!-- jackson -->
@@ -139,7 +139,7 @@
         <dependency>
             <groupId>com.google.guava</groupId>
             <artifactId>guava</artifactId>
-            <version>17.0</version>
+            <version>23.0</version>
         </dependency>
 
         <!-- jndi -->
@@ -278,14 +278,14 @@
 
         <!-- 数据库-->
         <dependency>
-            <groupId>com.oracle</groupId>
-            <artifactId>ojdbc6</artifactId>
-            <version>11.2.0.3</version>
+            <groupId>com.github.noraui</groupId>
+            <artifactId>ojdbc8</artifactId>
+            <version>12.2.0.1</version>
         </dependency>
         <dependency>
             <groupId>mysql</groupId>
             <artifactId>mysql-connector-java</artifactId>
-            <version>5.1.35</version>
+            <version>5.1.47</version>
         </dependency>
         <!-- H2数据库-->
         <dependency>

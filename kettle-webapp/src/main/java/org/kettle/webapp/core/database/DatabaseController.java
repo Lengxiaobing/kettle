@@ -572,8 +572,6 @@ public class DatabaseController {
     @RequestMapping(method = RequestMethod.POST, value = "/explorer")
     @ResponseBody
     protected List explorer(@RequestParam String transName, @RequestParam String databaseInfo, @RequestParam String nodeId, @RequestParam String text, @RequestParam int includeElement) throws IOException, KettleException, SQLException {
-//		JsonObject databaseInfoJson = JsonObject.fromObject(databaseInfo);
-//		DatabaseMeta databaseMeta = DatabaseCodec.decode(databaseInfoJson);
         TransMeta tra = RepositoryUtils.loadTransByPath("/" + transName);
         DatabaseMeta databaseMeta = tra.findDatabase(databaseInfo);
 
@@ -657,10 +655,10 @@ public class DatabaseController {
                     db.connect();
 
                     Map<String, Collection<String>> tableMap = db.getTableMap();
-                    List<String> tableKeys = new ArrayList<String>(tableMap.keySet());
+                    List<String> tableKeys = new ArrayList<>(tableMap.keySet());
                     Collections.sort(tableKeys);
                     for (String schema : tableKeys) {
-                        List<String> tables = new ArrayList<String>(tableMap.get(schema));
+                        List<String> tables = new ArrayList<>(tableMap.get(schema));
                         Collections.sort(tables);
                         for (String tableName : tables) {
                             result.add(DatabaseNode.initNode(tableName, schema, "datatable", true));

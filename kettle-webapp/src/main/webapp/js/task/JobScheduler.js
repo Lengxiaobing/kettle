@@ -125,7 +125,7 @@ function generateSchedulerMonitorPanel(secondGuidePanel) {
 }
 
 //生成定时类型的下拉列表
-function generateSchedulerTypeSelect(typeId) {
+function generateSchedulerTypeSelect(typeInfo) {
     //下拉列表智能执行的数据来源  暂时支持4种定时
     var schedulerType = [
         ["间隔重复", "间隔重复"],
@@ -160,7 +160,7 @@ function generateSchedulerTypeSelect(typeId) {
             //index是被选中的下拉项在整个列表中的下标 从0开始
             'select': function (combo, record, index) {
                 //获取当前执行类型被选中的Id    转换成对应的type数值
-                var typeId = Ext.getCmp("typeChooseBySelect").getValue();
+                var typeInfo = Ext.getCmp("typeChooseBySelect").getValue();
                 //获取节点IP下拉列表被选中的值
                 var hostName = Ext.getCmp("hostNameId").getValue();
                 //获取作业名框输入的值
@@ -171,17 +171,8 @@ function generateSchedulerTypeSelect(typeId) {
             }
         }
     })
-    if (typeId != undefined && typeId != "") {
-        if (typeId == "1") {
-            typeChooseCom.setValue("间隔重复");
-        } else if (typeId == "2") {
-            typeChooseCom.setValue("每天执行");
-        } else if (typeId == "3") {
-            typeChooseCom.setValue("每周执行");
-        } else if (typeId == "4") {
-            typeChooseCom.setValue("每月执行");
-        }
-
+    if (typeInfo != undefined && typeInfo != "") {
+        typeChooseCom.setValue(typeInfo);
     }
     return typeChooseCom;
 

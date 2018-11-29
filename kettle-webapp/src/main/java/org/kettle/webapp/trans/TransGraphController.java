@@ -99,11 +99,9 @@ public class TransGraphController {
     @ResponseBody
     @RequestMapping(method = RequestMethod.POST, value = "/save")
     protected void save(@RequestParam String graphXml) throws Exception {
-        Repository repository = null;
         GraphCodec codec = (GraphCodec) PluginFactory.getBean(GraphCodec.TRANS_CODEC);
-        System.out.println(StringEscapeHelper.decode(graphXml));
         AbstractMeta transMeta = codec.decode(StringEscapeHelper.decode(graphXml));
-        repository = App.getInstance().getRepository();
+        Repository repository = App.getInstance().getRepository();
         ObjectId existingId = repository.getTransformationID(transMeta.getName(), transMeta.getRepositoryDirectory());
         if (transMeta.getCreatedDate() == null) {
             transMeta.setCreatedDate(new Date());
@@ -127,14 +125,8 @@ public class TransGraphController {
         } else {
             versionComment = "no comment";
         }
-        transMeta.getSlaveServers().get(0).setPassword(transMeta.getSlaveServers().get(0).getPassword());
-        //要在加密前重新解密(解决转换点击运行后节点异常的问题)
-//        if (null != transMeta.getSlaveServers()) {
-//            for (int i = 0; i < transMeta.getSlaveServers().size(); i++) {
-//                SlaveServer slaveServer = transMeta.getSlaveServers().get(i);
-//                slaveServer.setPassword(KettleEncr.decryptPasswd(slaveServer.getPassword()));
-//            }
-//        }
+        // 清空SlaveServers，解决保存数据时，覆盖节点的问题
+        transMeta.getSlaveServers().clear();
         repository.save(transMeta, versionComment, null);
         JsonUtils.success("转换保存成功！");
     }

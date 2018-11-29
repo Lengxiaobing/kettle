@@ -39,14 +39,15 @@ public class TaskSchedulerController {
             //获取前台传递的分页参数
             int start = Integer.parseInt(request.getParameter("start"));
             int limit = Integer.parseInt(request.getParameter("limit"));
+
             //获取查询参数
             Integer typeId = null;
             if (!StringDateUtil.isEmpty(request.getParameter("typeId"))) {
-                if (request.getParameter("typeId").equals("间隔重复")) {
+                if ("间隔重复".equals(request.getParameter("typeId"))) {
                     typeId = 1;
-                } else if (request.getParameter("typeId").equals("每天执行")) {
+                } else if ("每天执行".equals(request.getParameter("typeId"))) {
                     typeId = 2;
-                } else if (request.getParameter("typeId").equals("每周执行")) {
+                } else if ("每周执行".equals(request.getParameter("typeId"))) {
                     typeId = 3;
                 } else {
                     typeId = 4;
