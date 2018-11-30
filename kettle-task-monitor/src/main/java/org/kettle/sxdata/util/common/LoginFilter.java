@@ -5,7 +5,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
-import java.io.PrintWriter;
 
 /**
  * @description: 登录过滤器
@@ -45,7 +44,6 @@ public class LoginFilter implements Filter {
                 chain.doFilter(arg0, arg1);
                 return;
             } else {
-                PrintWriter out = response.getWriter();
                 //如果是异步请求
                 if (request.getHeader("x-requested-with") != null && request.getHeader("x-requested-with").equals("XMLHttpRequest")) {
                     response.addHeader("sessionstatus", "timeout");

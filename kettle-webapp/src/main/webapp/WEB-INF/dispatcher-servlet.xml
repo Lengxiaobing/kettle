@@ -63,11 +63,25 @@
         <property name="driverClassName" value="com.mysql.jdbc.Driver"/>
         <!--  本地-->
         <property name="url"
-                  value="jdbc:mysql://127.0.0.1:3306/kettle?useUnicode=true&amp;characterEncoding=utf8&amp;characterSetResults=utf8&amp;autoReconnect=true"/>
+                  value="jdbc:mysql://127.0.0.1:3306/kettle?useUnicode=true&amp;characterEncoding=utf8&amp;characterSetResults=utf8&amp;autoReconnect=true&amp;useSSL=true"/>
         <property name="username" value="root"/>
         <property name="password" value="root"/>
-        <property name="validationQuery" value="SELECT 1"/>
+
+        <!-- validate配置，重连配置 -->
+        <!-- 默认值是 false, 当连接池中的空闲连接是否有效 -->
+        <property name="testWhileIdle" value="true"/>
+        <!-- 默认值是 true ，当从连接池取连接时，验证这个连接是否有效 -->
         <property name="testOnBorrow" value="true"/>
+        <!-- 默认值是 flase, 当从把该连接放回到连接池的时，验证这个连接是否有效 -->
+        <property name="testOnReturn" value="false"/>
+        <!-- 验证连接是否成功, SQL SELECT 指令至少要返回一行 -->
+        <property name="validationQuery" value="SELECT 1"/>
+        <!-- 在执行检查时超时设置，通过statement 设置，statement.setQueryTimeout(validationQueryTimeout)  -->
+        <property name="validationQueryTimeout" value="1"/>
+        <!-- 默认值是 -1 ，每隔一段多少毫秒跑一次回收空闲线程的线程 -->
+        <property name="timeBetweenEvictionRunsMillis" value="60000"/>
+        <!-- 默认值是 3 ，每次验证空闲连接的连接数目 -->
+        <property name="numTestsPerEvictionRun" value="3"/>
     </bean>
 
     <!-- spring集成MyBatis3 -->

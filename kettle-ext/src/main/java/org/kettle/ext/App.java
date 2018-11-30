@@ -155,6 +155,7 @@ public class App implements ApplicationContextAware {
             dbMeta.addExtraOption(databaseType, "characterSetResults", "utf8");
             dbMeta.addExtraOption(databaseType, "useUnicode", "true");
             dbMeta.addExtraOption(databaseType, "autoReconnect", "true");
+            dbMeta.addExtraOption(databaseType, "useSSL", "true");
 
             meta = new KettleDatabaseRepositoryMeta();
             meta.setName(hostname);

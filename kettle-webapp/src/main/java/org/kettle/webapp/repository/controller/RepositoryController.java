@@ -367,9 +367,8 @@ public class RepositoryController {
         String dir = path.substring(0, path.lastIndexOf("/"));
         String name = path.substring(path.lastIndexOf("/") + 1);
         Repository repository = App.getInstance().getRepository();
-        RepositoryDirectoryInterface directory = null;
         try {
-            directory = repository.findDirectory(dir);
+            RepositoryDirectoryInterface directory = repository.findDirectory(dir);
             if (directory == null) {
                 directory = repository.getUserHomeDirectory();
             }
@@ -426,8 +425,9 @@ public class RepositoryController {
             if (elements != null) {
                 for (RepositoryElementMetaInterface e : elements) {
                     String transPath = dir.getPath();
-                    if (!transPath.endsWith("/"))
+                    if (!transPath.endsWith("/")) {
                         transPath = transPath + '/';
+                    }
                     transPath = transPath + e.getName();
 
                     list.add(RepositoryNode.initNode(e.getName(), transPath, e.getObjectType()));
@@ -440,8 +440,9 @@ public class RepositoryController {
             if (elements != null) {
                 for (RepositoryElementMetaInterface e : elements) {
                     String transPath = dir.getPath();
-                    if (!transPath.endsWith("/"))
+                    if (!transPath.endsWith("/")) {
                         transPath = transPath + '/';
+                    }
                     transPath = transPath + e.getName();
 
                     list.add(RepositoryNode.initNode(e.getName(), transPath, e.getObjectType()));
@@ -611,9 +612,6 @@ public class RepositoryController {
 
         List<RepositoryDirectoryInterface> directorys = dir.getChildren();
         for (RepositoryDirectoryInterface child : directorys) {
-//			RepositoryCheckNode node = new RepositoryCheckNode(child.getName());
-//			node.setChildren(browser(repository, child, loadElement));
-//			node.setPath(child.getPath());
             list.add(RepositoryCheckNode.initNode(child.getName(), child.getPath(), browser(repository, child, loadElement)));
         }
 
@@ -622,8 +620,9 @@ public class RepositoryController {
             if (elements != null) {
                 for (RepositoryElementMetaInterface e : elements) {
                     String transPath = dir.getPath();
-                    if (!transPath.endsWith("/"))
+                    if (!transPath.endsWith("/")) {
                         transPath = transPath + '/';
+                    }
                     transPath = transPath + e.getName();
 
                     list.add(RepositoryCheckNode.initNode(e.getName(), transPath, e.getObjectType()));
@@ -637,8 +636,9 @@ public class RepositoryController {
             if (elements != null) {
                 for (RepositoryElementMetaInterface e : elements) {
                     String transPath = dir.getPath();
-                    if (!transPath.endsWith("/"))
+                    if (!transPath.endsWith("/")) {
                         transPath = transPath + '/';
+                    }
                     transPath = transPath + e.getName();
 
                     list.add(RepositoryCheckNode.initNode(e.getName(), transPath, e.getObjectType()));
